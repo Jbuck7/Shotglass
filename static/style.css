@@ -1,0 +1,40 @@
+body {
+	font-family: Arial, sans-serif;
+	text-align: center;
+	background-color: #87CEEB; /* Light blue background */
+}
+
+.menu {
+	background-color: #2F4F7F; /* Dark blue menu background */
+	padding: 20px;
+	text-align: center;
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+
+.menu-item {
+	display: inline-block;
+	padding: 10px 20px;
+	margin: 10px;
+	background-color: #2F4F7F; /* Dark blue button background */
+	color: #FFFFFF; /* White text */
+	text-decoration: none;
+	border-radius: 5px;
+}
+
+.menu-item:hover {
+	background-color: #1A1D23; /* Darken on hover */
+}
+
+.center {
+	text-align: center;
+	margin: 0 auto;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+h1, p {
+	color: #333;
+}
