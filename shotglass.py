@@ -2,7 +2,7 @@ import socket
 from HTTP import Request,Response
 
 class Shotglass:
-    def __init__(self, port=8080, host="0.0.0.0"):
+    def __init__(self, port=80, host="0.0.0.0"):
         self.port = port
         self.host = host
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -11,9 +11,11 @@ class Shotglass:
         self.routes = {}
 
 
-    def route(self, path):
+    def route(self, path, request_type='GET'):
         def decorator(func):
-            self.routes[path] = func
+            if path not in self.routes:
+                self.routes[path] = {}
+            self.routes[path][request_type] = func
             return func
         return decorator
 
@@ -43,26 +45,24 @@ class Shotglass:
     def handle_request(self):
         while True:
             client_socket, client_address = self.server_socket.accept()
-            text_request = client_socket.recv(1500).decode()
+            try:
+                text_request = client_socket.recv(1500).decode('utf-8')
+            except Exception as e:
+                print(f"Error handling request: {str(e)}")
+                continue
             request = Request(text_request)
             # Handle the request using the request object
             print(request.method)
             print(request.path)
             if request.method == 'GET':
                 if request.path in self.routes:
-                    self.routes[request.path](client_socket)
+                    self.routes[request.path]['GET'](client_socket)
                 else:
                     print("404")
                     error_response = self.create_response(404, "text/plain", "Not Found")
                     self.send_response(client_socket, error_response)
             elif request.method == 'POST':
-                # Parse the request body
-                data = request.body
-                # Handle the request
-                # ...
-                # Return a response
-                response = self.create_response(201, "text/plain", "Resource created")
-                self.send_response(client_socket, response)
+                self.handle_post_request(client_socket, request)
             else:
                 error_response = self.create_response(501, "text/plain", "Not Implemented")
                 self.send_response(client_socket, error_response)

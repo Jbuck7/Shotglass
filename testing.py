@@ -2,14 +2,20 @@ from shotglass import Shotglass
 
 app = Shotglass()
 
-@app.route("/")
+@app.route("/",'GET')
 def index(client_socket):
     with open('templates/home.html', 'r') as file:
         html_string = file.read()
     response = app.create_response(200, "text/html", html_string)
     app.send_response(client_socket, response)
+@app.route("/chat",'GET')
+def index(client_socket):
+    with open('templates/chat.html', 'r') as file:
+        html_string = file.read()
+    response = app.create_response(200, "text/html", html_string)
+    app.send_response(client_socket, response)
 
-@app.route("/static/style.css")
+@app.route("/static/style.css",'GET')
 def serve_static(client_socket):
     file_path = "static/style.css"
     with open(file_path, 'r') as file:
