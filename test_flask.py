@@ -28,6 +28,8 @@ def test_response_time(client: FlaskClient):
             
     avg_time = response_time / requests
     print("\nAverage response time: " + str(avg_time))
+    num_get_request_per_sec = int(60 / avg_time)
+    print("Number of GET request for flask per second: " + str(num_get_request_per_sec))
     
 if __name__ == "__main__":
     pytest.main(["-v"])
