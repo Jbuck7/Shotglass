@@ -10,7 +10,6 @@ class Shotglass:
         self.error_handlers = {}
         self.routes = {}
 
-
     def route(self, path, request_type='GET'):
         def decorator(func):
             if path not in self.routes:
@@ -25,7 +24,6 @@ class Shotglass:
             return func
         return decorator
 
-    
     def render_template(self, template_name):
         with open(f'templates/{template_name}.html', 'r') as file:
             return file.read()
