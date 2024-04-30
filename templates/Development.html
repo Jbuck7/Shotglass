@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Page</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="menu">
+        <a href="documentation" class="menu-item">Documentation</a>
+        <a href="vs" class="menu-item">Speed Test</a>
+        <a href="/" class="menu-item">Home</a>
+    </div>
+    <div class="content">
+        <h1>Development</h1>
+        <p>Our first step with this project involved a lot of research. I ran into many concepts I had never heard of
+            before. After much confusion I was able to come to an understanding of what a web server framework actually
+            is and what its jobs are. The implementation of a full web server framework that's comparable to Flask was
+            never the goal. From the onset I wanted to make the simplest, most barebones, framework imaginable. The only
+            job I wanted it to do would be to host simple web sites. I am happy to report that we have succeeded in that
+            goal! As you can see, this report is hosted on a website and of course that website is powered by Shotglass.
+            I will get into further details about how we are hosting the website later.
+            The first step of implementation was to understand HTTP. Our research brought us to an understanding of the
+            format and methods as we presented in class. When it comes to actual code I thought it would be best to have
+            the requests and responses as objects instead of just strings. My logic was that being able to reference
+            individual parts of a request such as the request url would be incredibly useful when implementing features
+            down the line. You can find the code for these objects in HTTP.py.
+            Next we needed a way to make our connections and send data. For this we use the socket library. This library
+            contains exactly what we needed. With this we were able to make a connection and start receiving requests.
+            With this we are able to turn those requests into request objects using the HTTP code we made earlier.
+            Finally we can start on actually handling these requests. First we have logic to make sure the requests are
+            valid. At the start the whole server would crash if a client tried to go to an undefined URL. We leave it up
+            to the developer to define the behavior of GET requests based on the target URL. This approach is also how
+            Flask does things. The developer defines routes in their server code and in that they can define functions
+            to handle the logic of sending back a response. Shotglass provides the methods to create response objects
+            and send responses. Given further development I would prioritize the routing system. As it stands the
+            developer needs to define a route for each resource that can be hit with a request. A better implementation
+            would allow for more generic definitions. We see this in Flask. Say for example the developer has a
+            templates folder. This folder only contains HTML files named A.html B.html, and so on. The structure of the
+            logic for the route definition of A.html is the same as B. The only difference is the name of the requested
+            resource. Ideally the developer could define a route that handles all of the files within this templates
+            folder, however with our current implementation that is not possible due to the way we structured our most
+            basic code.
+            Once we had our web page made, I decided I would get a Digital Ocean server and a domain and try to host the
+            website from there to have it up at all times. I eventually got it working after some DNS configuration for
+            the domain. Unfortunately, within an hour, I noticed I had lost ssh access to my digital ocean server and
+            that the cpu usage had spiked to nearly 100%. I was able to regain terminal access with the Digital Ocean
+            website and noticed 4 unknown IP addresses had connected other than myself. I'm still not sure how this
+            happened but it was quite the setback and cost a few hours of troubleshooting. I had worked on the code via
+            ssh and needed to push my changes to the github repo before destroying the server and making another one.
+            Hopefully the same thing doesn't happen to this server! Another big hurdle was figuring out how to do GET
+            requests for non HTML files. In this demo website we have png files. This implementation took much more work
+            than expected. It took a few hours to get working but eventually a combination of encoding and messing with
+            the response format got it working.</p>
+        <img src="/static/cpu.png" alt="cpu">
+        <p>As for this website itself I won't say too much. I had never worked with HTML so everything is super basic. I
+            made some templates for handling errors but didn't get around to using all of them. That reminds me that I
+            forgot to mention how we handle error responses. For this developers can define error handlers in the same
+            way they do routes. This allows for different behaviors depending on the error code. </p>
+    </div>
+</body>
+
+</html>

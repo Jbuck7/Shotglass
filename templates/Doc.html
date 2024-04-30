@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shotglass Documentation</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="menu">
+        <a href="/" class="menu-item">Home</a>
+        <a href="vs" class="menu-item">Speed Test</a>
+        <a href="Development" class="menu-item">Development</a>
+    </div>
+    <div class="center">
+        <h1>Shotglass Documentation</h1>
+        <p>Introduction</p>
+        <p>Shotglass is a simple web server framework that allows you to create web applications using Python.</p>
+        <h2>Classes</h2>
+        <p><b>Shotglass</b>: The main class that represents the web server.</p>
+        <h2>Methods</h2>
+        <p><b>__init__(port=80, host="0.0.0.0")</b>: Initializes the web server with a port and host.</p>
+        <p><b>route(path, request_type='GET')</b>: Decorator to define a route for a specific path and request type.</p>
+        <p><b>errorhandler(error_code)</b>: Decorator to define an error handler for a specific error code.</p>
+        <p><b>start()</b>: Starts the web server.</p>
+        <p><b>handle_request()</b>: Handles incoming requests.</p>
+        <p><b>handle_get_request(client_socket, request)</b>: Handles GET requests.</p>
+        <p><b>handle_post_request(client_socket, request)</b>: Handles POST requests.</p>
+        <p><b>create_response(status_code, content_type, content, headers=None)</b>: Creates an HTTP response.</p>
+        <p><b>send_response(client_socket, response)</b>: Sends an HTTP response to the client.</p>
+        <p><b>run()</b>: Starts the web server and begins handling requests.</p>
+        <h2>Usage</h2>
+        <ol>
+            <li>Create an instance of the Shotglass class.</li>
+            <li>Define routes using the <b>@route</b> decorator.</li>
+            <li>Define error handlers using the <b>@errorhandler</b> decorator.</li>
+            <li>Start the web server using the <b>start</b> method.</li>
+            <li>The web server will begin handling requests.</li>
+        </ol>
+    </div>
+</body>
+
+</html>

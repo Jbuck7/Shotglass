@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flask Vs. Shotglass</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="menu">
+        <a href="documentation" class="menu-item">Documentation</a>
+        <a href="/" class="menu-item">Home</a>
+        <a href="Development" class="menu-item">Development</a>
+    </div>
+    <div class="center">
+        <h1>Flask Vs. Shotglass</h1>
+        <p>Creating tests to compare the performance of the GET function of Flask and our Shotglass implementation was
+            more
+            difficult than we thought. We used a Pytest for testing response time for both Flask and Shotglass. We used
+            Pytest so that the results display would be clear in comparing them. Also, in using Pytest, it was simpler
+            to
+            create a framework where we could create an instance of Flask or Shotglass as well as the client to test
+            both
+            frameworks. Testing for GET performance of Flask was a lot simpler than it was to test the GET performance
+            of
+            our Shotglass implementation. To test for the GET performance of Flask, we created a simple instance of
+            Flask.
+            Then we proceeded to simulate a client sending the instance of Flask requests for 100 times then make the
+            Flask
+            instance send the response for the requests. To find the response time for each request, we would start the
+            timer before requesting the Flask instance for response and would stop the timer after the response was
+            received. We then added the response time that it took for the Flask instance to respond for each request
+            then
+            divided the total response time by the total number of requests made. It gave us the average response time
+            for
+            each request and response made for 100 requests and responses. Then to compare the number of GET requests
+            for
+            Flask and Shotglass, we divided 60 by the average response time to calculate the number of GET requests for
+            Flask. Creating a test for the Shotglass was tougher than creating a test for the Flask. While the overall
+            structure was similar to how I was testing the Flask framework, there were a lot more to be added than when
+            testing the Flask framework. For the Shotglass framework, we had to create an actual class to simulate a
+            client
+            server for the Shotglass. It was a very simple instance of Shotglass client server. It used TCP as its way
+            of
+            connection because the Shotglass framework used TCP connection as well. Within the ShotglassClient class, we
+            created a function in which the client sends requests to the Shotglass server. Within the function, the
+            timer
+            would start before the request and would end after the response was received. For the Shotglass framework
+            test,
+            I also had to use threads to avoid having a problem with having the tests not run within the server as the
+            test
+            could be blocked until the server is closed. I was having trouble with the server and tests not running
+            concurrently and the server seeming to be stuck and not closing without using threads to make the server and
+            tests run concurrently. For the Shotglass framework test, I was also trying to test the framework by not
+            opening
+            a server but trying to just create an instance of Shotglass framework but it wasn't working and correct
+            because
+            I was sending requests from a socket rather than a server like how I was testing the Flask framework. It was
+            printing results that were way lower than the Flask framework because it didn't need to send the request
+            from a
+            server but a virtual socket. The remaining parts of the test were similar to the structure of the Flask
+            test. I
+            made the test send the Shotglass server the same number of requests as the test for the Flask. Ultimately,
+            as it
+            will be given in the graph and table below, the Flask framework outperformed our Shotglass framework. It was
+            expected because the Flask framework has been created for a significant length of time compared to our
+            Shotglass
+            framework and would likely have gone through a significant amount of revisions to make the framework more
+            efficient.
+        </p>
+        <div style="display: flex;">
+            <img src="/static/num.png" alt="num">
+            <img src="/static/time.png" alt="time">
+        </div>
+    </div>
+</body>
+
+</html>

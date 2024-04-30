@@ -1,5 +1,5 @@
 import socket
-from HTTP import Request,Response
+from HTTP import Request, Response
 
 class Shotglass:
     def __init__(self, port=80, host="0.0.0.0"):
@@ -23,17 +23,14 @@ class Shotglass:
             self.error_handlers[error_code] = func
             return func
         return decorator
+        
 
-    def render_template(self, template_name):
-        with open(f'templates/{template_name}.html', 'r') as file:
-            return file.read()
-
-    def send_file(self, client_socket, file_path, content_type):
-        print("sending")
-        with open(file_path, 'rb') as file:
-            file_data = file.read()
-        response = self.create_response(200, content_type, file_data)
-        self.send_response(client_socket, response)
+    # def send_file(self, client_socket, file_path, content_type):
+    #     print("sending")
+    #     with open(file_path, 'rb') as file:
+    #         file_data = file.read()
+    #     response = self.create_response(200, content_type, file_data)
+    #     self.send_response(client_socket, response)
 
     def start(self):
         self.server_socket.bind((self.host, self.port))
@@ -46,25 +43,47 @@ class Shotglass:
             try:
                 text_request = client_socket.recv(1500).decode('utf-8')
             except Exception as e:
-                print(f"Error handling request: {str(e)}")
+                print(f"Error receiving request: {str(e)}")
                 continue
-            request = Request(text_request)
-            # Handle the request using the request object
+            try:
+                request = Request(text_request)
+            except Exception as e:
+                print(f"Error parsing request: {str(e)}")
+                continue
             print(request.method)
             print(request.path)
             if request.method == 'GET':
-                if request.path in self.routes:
-                    self.routes[request.path]['GET'](client_socket)
-                else:
-                    print("404")
-                    error_response = self.create_response(404, "text/plain", "Not Found")
-                    self.send_response(client_socket, error_response)
+                self.handle_get_request(client_socket, request)
             elif request.method == 'POST':
                 self.handle_post_request(client_socket, request)
             else:
                 error_response = self.create_response(501, "text/plain", "Not Implemented")
                 self.send_response(client_socket, error_response)
             client_socket.close()
+
+    def handle_get_request(self, client_socket, request):
+        if request.path in self.routes:
+            self.routes[request.path]['GET'](client_socket)
+        else:
+            self.error_handlers[404](client_socket)
+
+
+    def handle_post_request(self, client_socket, request):
+        if request.path in self.routes:
+            self.routes[request.path]['POST'](client_socket, request)
+        else:
+            error_response = self.create_response(404, "text/plain", "Not Found")
+            self.send_response(client_socket, error_response)
+
+    # def get_content_type(self, file_path):
+    #     content_type = "text/plain"
+    #     if file_path.endswith(".html"):
+    #         content_type = "text/html"
+    #     elif file_path.endswith(".css"):
+    #         content_type = "text/css"
+    #     elif file_path.endswith(".js"):
+    #         content_type = "application/javascript"
+    #     return content_type
 
     def create_response(self, status_code, content_type, content, headers=None):
         return Response(status_code, content_type, content, headers)
@@ -75,8 +94,11 @@ class Shotglass:
         for header, value in response.headers.items():
             http_response += "{}: {}\r\n".format(header, value)
         http_response += "\r\n"
-        http_response += response.content
-        client_socket.send(http_response.encode())
+        if type(response.content) == str:
+            response.content = response.content.encode()
+        encoded = http_response.encode() + response.content
+        client_socket.send(encoded)
+        
 
     def run(self):
         self.start()
